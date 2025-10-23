@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
+
+// Define the structure Item
+struct Item {
+    int id;
+    string name;
+    float cost;
+};
+
+// Function to compare two items based on their cost (used for sorting in descending order)
+bool compare(Item a, Item b) {
+    return a.cost > b.cost; // Sort in descending order of cost
+}
+
+int main() {
+    const int size = 8;
+    Item items[size];
+    float totalCost = 0.0;
+
+    // Input details of 8 items
+    for (int i = 0; i < size; ++i) {
+        cout << "Enter details for item " << i + 1 << ":\n";
+        cout << "ID: ";
+        cin >> items[i].id;
+        cin.ignore();  // to clear the input buffer
+        cout << "Name: ";
+        getline(cin, items[i].name);
+        cout << "Cost: ";
+        cin >> items[i].cost;
+        totalCost += items[i].cost;
+    }
+
+    // Sort the items array in descending order of cost
+    sort(items, items + size, compare);
+
+    // Display the sorted list of items
+    cout << "\nSorted list of items (in descending order of cost):\n";
+    cout << left << setw(10) << "ID" << setw(20) << "Name" << setw(10) << "Cost" << endl;
+    cout << "---------------------------------------------\n";
+    for (int i = 0; i < size; ++i) {
+        cout << setw(10) << items[i].id 
+             << setw(20) << items[i].name 
+             << setw(10) << fixed << setprecision(2) << items[i].cost << endl;
+    }
+
+    // Calculate and display the average cost
+    float averageCost = totalCost / size;
+    cout << "\nAverage cost of all items: " << fixed << setprecision(2) << averageCost << endl;
+
+    return 0;
+}
