@@ -1,0 +1,77 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Define the structure for Marks
+struct Marks {
+    float math;
+    float science;
+    float english;
+};
+
+// Define the structure for Student
+struct Student {
+    int rollNo;
+    string name;
+    Marks marks;
+};
+
+// Function to calculate the average marks of a student
+float calculateAverage(Marks m) {
+    return (m.math + m.science + m.english) / 3.0;
+}
+
+int main() {
+    const int numStudents = 5;
+    Student students[numStudents];
+
+    // Input details for each student
+    for (int i = 0; i < numStudents; ++i) {
+        cout << "Enter details for student " << i + 1 << ":\n";
+        cout << "Roll No: ";
+        cin >> students[i].rollNo;
+        cin.ignore();  // to clear the input buffer
+        cout << "Name: ";
+        getline(cin, students[i].name);
+        cout << "Marks in Math: ";
+        cin >> students[i].marks.math;
+        cout << "Marks in Science: ";
+        cin >> students[i].marks.science;
+        cout << "Marks in English: ";
+        cin >> students[i].marks.english;
+        cout << endl;
+    }
+
+    // Find the student with the highest and lowest average marks
+    int highestIndex = 0, lowestIndex = 0;
+    float highestAvg = calculateAverage(students[0].marks);
+    float lowestAvg = highestAvg;
+
+    for (int i = 1; i < numStudents; ++i) {
+        float avg = calculateAverage(students[i].marks);
+        if (avg > highestAvg) {
+            highestAvg = avg;
+            highestIndex = i;
+        }
+        if (avg < lowestAvg) {
+            lowestAvg = avg;
+            lowestIndex = i;
+        }
+    }
+
+    // Display the student with the highest average marks
+    cout << "\nStudent with the highest average marks:\n";
+    cout << "Roll No: " << students[highestIndex].rollNo << endl;
+    cout << "Name: " << students[highestIndex].name << endl;
+    cout << "Average Marks: " << fixed << setprecision(2) << highestAvg << endl;
+
+    // Display the student with the lowest average marks
+    cout << "\nStudent with the lowest average marks:\n";
+    cout << "Roll No: " << students[lowestIndex].rollNo << endl;
+    cout << "Name: " << students[lowestIndex].name << endl;
+    cout << "Average Marks: " << fixed << setprecision(2) << lowestAvg << endl;
+
+    return 0;
+}
