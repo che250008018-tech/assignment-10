@@ -1,0 +1,93 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+// Define the SalesRecord structure
+struct SalesRecord {
+    string month;
+    float amount;
+};
+
+// Function to write sales data to a file
+void writeSalesDataToFile(const vector<SalesRecord>& records) {
+    ofstream outFile("sales_data.txt");
+    if (!outFile) {
+        cout << "Error opening the file for writing.\n";
+        return;
+    }
+
+    // Write each record to the file
+    for (const auto& record : records) {
+        outFile << record.month << " " << fixed << setprecision(2) << record.amount << endl;
+    }
+
+    outFile.close();
+}
+
+// Function to read sales data from the file
+vector<SalesRecord> readSalesDataFromFile() {
+    vector<SalesRecord> records;
+    ifstream inFile("sales_data.txt");
+    if (!inFile) {
+        cout << "Error opening the file for reading.\n";
+        return records;
+    }
+
+    SalesRecord record;
+    while (inFile >> record.month >> record.amount) {
+        records.push_back(record);
+    }
+
+    inFile.close();
+    return records;
+}
+
+// Function to calculate the yearly average sales
+float calculateYearlyAverage(const vector<SalesRecord>& records) {
+    float total = 0.0;
+    for (const auto& record : records) {
+        total += record.amount;
+    }
+    return total / records.size();
+}
+
+// Function to display months with sales above the yearly average
+void displayAboveAverageSales(const vector<SalesRecord>& records, float yearlyAvg) {
+    cout << "\nMonths with sales above the yearly average (₹" << fixed << setprecision(2) << yearlyAvg << "):\n";
+    for (const auto& record : records) {
+        if (record.amount > yearlyAvg) {
+            cout << record.month << ": ₹" << fixed << setprecision(2) << record.amount << endl;
+        }
+    }
+}
+
+int main() {
+    vector<SalesRecord> salesRecords(12);
+
+    // Input sales data for all 12 months
+    cout << "Enter sales data for the year (12 months):\n";
+    for (int i = 0; i < 12; ++i) {
+        cout << "Month " << i + 1 << ": ";
+        cin >> salesRecords[i].month;
+        cout << "Sales for " << salesRecords[i].month << ": ₹";
+        cin >> salesRecords[i].amount;
+    }
+
+    // Write data to the file
+    writeSalesDataToFile(salesRecords);
+
+    // Read data back from the file
+    vector<SalesRecord> readRecords = readSalesDataFromFile();
+
+    // Calculate yearly average
+    float yearlyAvg = calculateYearlyAverage(readRecords);
+
+    // Display months with sales above the average
+    displayAboveAverageSales(readRecords, yearlyAvg);
+
+    return 0;
+}
