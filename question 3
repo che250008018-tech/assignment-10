@@ -1,0 +1,104 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Define the Employee structure
+struct Employee {
+    int id;
+    string name;
+    float salary;
+};
+
+// Function to display all employee details
+void displayEmployees(Employee employees[], int size) {
+    cout << "\nEmployee Details:\n";
+    cout << left << setw(10) << "ID" << setw(20) << "Name" << setw(10) << "Salary" << endl;
+    cout << "-------------------------------------------\n";
+    for (int i = 0; i < size; ++i) {
+        cout << setw(10) << employees[i].id 
+             << setw(20) << employees[i].name 
+             << setw(10) << fixed << setprecision(2) << employees[i].salary << endl;
+    }
+}
+
+// Function to search an employee by id
+void searchEmployeeById(Employee employees[], int size, int id) {
+    bool found = false;
+    for (int i = 0; i < size; ++i) {
+        if (employees[i].id == id) {
+            cout << "\nEmployee Found:\n";
+            cout << "ID: " << employees[i].id << endl;
+            cout << "Name: " << employees[i].name << endl;
+            cout << "Salary: ₹" << fixed << setprecision(2) << employees[i].salary << endl;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "\nEmployee with ID " << id << " not found.\n";
+    }
+}
+
+// Function to increase salary of employees earning less than ₹30,000 by 10%
+void increaseSalary(Employee employees[], int size) {
+    for (int i = 0; i < size; ++i) {
+        if (employees[i].salary < 30000) {
+            employees[i].salary += employees[i].salary * 0.10; // 10% increase
+        }
+    }
+    cout << "\nSalaries of employees earning less than ₹30,000 have been increased by 10%.\n";
+}
+
+int main() {
+    const int numEmployees = 10;
+    Employee employees[numEmployees];
+
+    // Read employee details from user input
+    for (int i = 0; i < numEmployees; ++i) {
+        cout << "\nEnter details for employee " << i + 1 << ":\n";
+        cout << "ID: ";
+        cin >> employees[i].id;
+        cin.ignore();  // to clear the input buffer
+        cout << "Name: ";
+        getline(cin, employees[i].name);
+        cout << "Salary: ₹";
+        cin >> employees[i].salary;
+    }
+
+    int choice;
+    do {
+        // Display menu
+        cout << "\nMenu:\n";
+        cout << "1. Display all employee details\n";
+        cout << "2. Search for an employee by ID\n";
+        cout << "3. Increase salary of employees earning less than ₹30,000 by 10%\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                displayEmployees(employees, numEmployees);
+                break;
+            case 2: {
+                int searchId;
+                cout << "Enter the employee ID to search: ";
+                cin >> searchId;
+                searchEmployeeById(employees, numEmployees, searchId);
+                break;
+            }
+            case 3:
+                increaseSalary(employees, numEmployees);
+                break;
+            case 4:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
